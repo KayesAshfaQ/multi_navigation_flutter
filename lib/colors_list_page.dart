@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_navigation_flutter/widgets.dart';
 
 class ColorsListPage extends StatelessWidget {
   ColorsListPage({
@@ -29,7 +30,10 @@ class ColorsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: titleStyle,
+        ),
         backgroundColor: color,
       ),
       body: Container(

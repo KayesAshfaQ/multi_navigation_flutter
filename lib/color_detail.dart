@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_navigation_flutter/widgets.dart';
 
 class ColorDetailsPage extends StatelessWidget {
   const ColorDetailsPage({
@@ -16,8 +17,12 @@ class ColorDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: backButton,
         backgroundColor: color,
-        title: Text('$title[$materialIndex]'),
+        title: Text(
+          '$title[$materialIndex]',
+          style: titleStyle,
+        ),
       ),
       body: Container(
         color: color[materialIndex],

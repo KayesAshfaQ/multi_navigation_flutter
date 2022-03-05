@@ -11,9 +11,9 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var _currentTab = TabItem.red;
+  TabItem _currentTab = TabItem.red;
 
-  final _navigatorKeys = {
+  final Map<TabItem, GlobalKey<NavigatorState>> _navigatorKeys = {
     TabItem.red: GlobalKey<NavigatorState>(),
     TabItem.green: GlobalKey<NavigatorState>(),
     TabItem.blue: GlobalKey<NavigatorState>(),
@@ -36,6 +36,7 @@ class _AppState extends State<App> {
         }
         // let system handle back button if we're on the first route
         return isFirstRouteInCurrentTab;
+        //return false;
       },
       child: Scaffold(
         body: Stack(
