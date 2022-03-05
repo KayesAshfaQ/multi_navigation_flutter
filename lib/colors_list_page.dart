@@ -12,6 +12,19 @@ class ColorsListPage extends StatelessWidget {
   final String title;
   final ValueChanged<int> onPush;
 
+  final List<int> materialIndices = [
+    900,
+    800,
+    700,
+    600,
+    500,
+    400,
+    300,
+    200,
+    100,
+    50
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +38,6 @@ class ColorsListPage extends StatelessWidget {
       ),
     );
   }
-
-  final List<int> materialIndices = [
-    900,
-    800,
-    700,
-    600,
-    500,
-    400,
-    300,
-    200,
-    100,
-    50
-  ];
 
   Widget _buildList() {
     return ListView.builder(

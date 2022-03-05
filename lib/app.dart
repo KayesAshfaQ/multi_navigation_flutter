@@ -11,18 +11,44 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var _currentTab = TabItem.green;
+  var _currentTab = TabItem.red;
+
+  final _navigatorKeys = {
+    TabItem.red: GlobalKey<NavigatorState>(),
+    TabItem.green: GlobalKey<NavigatorState>(),
+    TabItem.blue: GlobalKey<NavigatorState>(),
+  };
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabNavigator(
-        navigatorKey: GlobalKey<NavigatorState>(),
-        tabItem: _currentTab,
-      ),
-      bottomNavigationBar: BottomNavigation(
-        currentTab: _currentTab,
-        onSelectTab: _selectTab,
+    return WillPopScope(
+      onWillPop: () async {
+        final bool isFirstRouteInCurrentTab =
+            !await _navigatorKeys[_currentTab]!.currentState!.maybePop();
+        if (isFirstRouteInCurrentTab) {
+          // if not on the 'main' tab
+          if (_currentTab != TabItem.red) {
+            // select 'main' tab
+            _selectTab(TabItem.red);
+            // back button handled by app
+            return false;
+          }
+        }
+        // let system handle back button if we're on the first route
+        return isFirstRouteInCurrentTab;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _buildOffstageNavigator(TabItem.red),
+            _buildOffstageNavigator(TabItem.green),
+            _buildOffstageNavigator(TabItem.blue),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigation(
+          currentTab: _currentTab,
+          onSelectTab: _selectTab,
+        ),
       ),
     );
   }
@@ -31,22 +57,13 @@ class _AppState extends State<App> {
     setState(() => _currentTab = tabItem);
   }
 
-  Widget _buildBody() {
-    return Container(
-      color: activeTabColor[_currentTab],
-      alignment: Alignment.center,
-      child: FlatButton(
-        child: const Text(
-          'PUSH',
-          style: TextStyle(fontSize: 32.0, color: Colors.white),
-        ),
-        onPressed: _push,
+  Widget _buildOffstageNavigator(TabItem tabItem) {
+    return Offstage(
+      offstage: _currentTab != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
       ),
     );
-  }
-
-  void _push() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Container()));
   }
 }
